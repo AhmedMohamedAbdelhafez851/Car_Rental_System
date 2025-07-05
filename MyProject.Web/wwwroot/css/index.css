@@ -1,0 +1,120 @@
+﻿/* index.css */
+:root {
+    --primary: #4361ee;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, #f5f7fb, #e9ecef);
+}
+
+.container-box {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.rental-card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 0.75rem 1.25rem;
+}
+
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-dark {
+    background: var(--primary);
+}
+
+.rental-row {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .rental-row:hover {
+        background-color: #f1f3f5;
+        transform: translateY(-2px);
+    }
+
+.badge-status {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-input {
+    border-radius: 25px;
+    padding-right: 2.5rem;
+    transition: all 0.3s ease;
+}
+
+    .search-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 8px rgba(67, 97, 238, 0.3);
+    }
+
+.search-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary);
+}
+
+.loading-spinner {
+    position: absolute;
+    right: 2.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.btn-info, .btn-success {
+    border-radius: 20px;
+    padding: 0.3rem 0.75rem;
+    transition: all 0.3s ease;
+}
+
+    .btn-info:hover, .btn-success:hover {
+        transform: scale(1.05);
+        box-shadow: var(--shadow);
+    }
+
+.modal-content {
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.modal-header, .modal-footer {
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+
+    .table th, .table td {
+        padding: 0.5rem;
+    }
+
+    .btn-sm {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+    }
+}

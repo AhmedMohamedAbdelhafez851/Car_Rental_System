@@ -1,0 +1,201 @@
+﻿/* quick.css */
+:root {
+    --primary: #007bff;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --info: #17a2b8;
+    --light: #f8f9fa;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    direction: rtl;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e9ecef, #dee2e6);
+}
+
+.rental-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+header {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.rental-section {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+    .rental-section:hover {
+        transform: translateY(-5px);
+    }
+
+.card-header {
+    border-bottom: none;
+    padding: 0.75rem 1.25rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.is-valid {
+    border-color: #28a745;
+}
+
+.price-card {
+    background: #e9f7ef;
+    border-radius: 8px;
+    border: 1px solid #d4edda;
+}
+
+.btn {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+    .btn-primary:hover {
+        background: #0056b3;
+        transform: scale(1.05);
+    }
+
+    .btn-primary:disabled {
+        background: var(--secondary);
+        opacity: 0.7;
+    }
+
+#confirmSubmitBtn {
+    background: var(--success);
+    border-color: var(--success);
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+    #confirmSubmitBtn:hover {
+        background: #218838;
+        transform: scale(1.05);
+        box-shadow: var(--shadow);
+    }
+
+    #confirmSubmitBtn:disabled {
+        background: var(--secondary);
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    #confirmSubmitBtn.loading {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+.alert-info {
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.modal-content {
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.modal-header {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+/* Modal backdrop fixes */
+.modal-backdrop {
+    opacity: 0.5 !important;
+    z-index: 1040 !important;
+}
+
+body.modal-open {
+    overflow: auto;
+    padding-right: 0 !important;
+}
+
+.modal {
+    z-index: 1050;
+}
+
+/* Fix for stacked modals */
+.modal-backdrop + .modal-backdrop {
+    z-index: 1050 !important;
+}
+
+.modal-backdrop.show {
+    opacity: 0.5 !important;
+}
+
+/* Alert styles */
+.alert {
+    max-width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+/* إضافة أيقونة بحث لحقل Select2 */
+.select2-container .select2-search--dropdown .select2-search__field {
+    padding-right: 2.5rem; /* مساحة للأيقونة */
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='16' height='16' fill='%236c757d'%3E%3Cpath d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+    background-size: 16px;
+}
+
+    /* تحسين مظهر حقل البحث */
+    .select2-container .select2-search--dropdown .select2-search__field:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+
+@media (max-width: 768px) {
+    .rental-section .card-body .row > div {
+        margin-bottom: 1rem;
+    }
+
+    .price-card .row {
+        flex-direction: column;
+        text-align: center;
+    }
+}

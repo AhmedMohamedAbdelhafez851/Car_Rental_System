@@ -1,0 +1,18 @@
+﻿.container-box {
+    background-color: #f8f9fa;
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.card-header {
+    background: linear-gradient(90deg, #007bff, #0056b3);
+}
+
+.badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.form-select, .form-control {
+    border-radius: 8px;
+}

@@ -1,0 +1,101 @@
+﻿/* global.css */
+/*:root {
+    --primary-color: #007bff;
+    --primary-dark: #0056b3;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --border-color: #e2e8f0;
+    --border-radius: 8px;
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --transition-normal: 0.3s ease-in-out;
+    --font-size-base: 0.9rem;
+    --font-size-lg: 1rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+}
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    direction: rtl;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+}
+
+.container-box {
+    background: var(--bg-primary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) auto;
+    max-width: 1200px;
+}
+
+h3 {
+    color: var(--primary-color);
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-md);
+}
+
+.table {
+    background: var(--bg-primary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+
+    .table th, .table td {
+        vertical-align: middle;
+        padding: var(--spacing-sm);
+    }
+
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-dark th {
+    background-color: var(--primary-dark);
+    color: #fff;
+}
+
+.btn {
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    transition: var(--transition-normal);
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        border-color: var(--primary-dark);
+    }
+
+.btn-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.badge {
+    padding: var(--spacing-sm);
+    border-radius: 15px;
+    font-size: var(--font-size-base);
+}
+
+.input-group .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}*/

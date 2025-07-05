@@ -1,0 +1,103 @@
+﻿/* checkin.css */
+:root {
+    --primary: #4361ee;
+    --success: #28a745;
+    --light: #f8f9fa;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, #f5f7fb, #e9ecef);
+}
+
+.container-box {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.form-card {
+    background: #fafbff;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #eaeef7;
+    transition: transform 0.3s ease;
+}
+
+    .form-card:hover {
+        transform: translateY(-3px);
+    }
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+    .section-header i {
+        background: rgba(67, 97, 238, 0.1);
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0.75rem;
+        color: var(--primary);
+    }
+
+.price-card {
+    background: linear-gradient(120deg, #e8f5e9, #f1f8e9);
+    border-left: 4px solid var(--success);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.table-borderless td {
+    padding: 0.5rem;
+}
+
+.total-row {
+    font-weight: bold;
+    background: rgba(67, 97, 238, 0.05);
+}
+
+.btn-lg, .btn-outline-secondary, .btn-danger {
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+    .btn-lg:hover, .btn-outline-secondary:hover, .btn-danger:hover {
+        transform: scale(1.05);
+        box-shadow: var(--shadow);
+    }
+
+.modal-content {
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.modal-header, .modal-footer {
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .form-card .row > div {
+        margin-bottom: 0.75rem;
+    }
+
+    .btn-lg, .btn-outline-secondary, .btn-danger {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .penalty-row .col-md-1 {
+        text-align: center;
+    }
+}

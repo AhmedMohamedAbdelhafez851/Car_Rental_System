@@ -1,0 +1,139 @@
+/* System Header */
+.system-header {
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+/* Main Navigation */
+.main-navigation {
+    background: #fff;
+    border-bottom: 1px solid #eaeaea;
+    padding: 1rem 0;
+}
+
+.nav-cards {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db transparent;
+}
+
+    .nav-cards::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .nav-cards::-webkit-scrollbar-thumb {
+        background-color: #d1d5db;
+        border-radius: 3px;
+    }
+
+.nav-card {
+    flex: 0 0 auto;
+    width: 120px;
+    padding: 1rem 0.5rem;
+    border-radius: 8px;
+    background: #f8f9fa;
+    text-align: center;
+    text-decoration: none;
+    color: #2d3748;
+    transition: all 0.2s ease;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .nav-card i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: #4a5568;
+    }
+
+    .nav-card span {
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .nav-card:hover {
+        background: #edf2f7;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        color: #2d3748;
+    }
+
+    .nav-card.highlight {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+    }
+
+        .nav-card.highlight i {
+            color: #16a34a;
+        }
+
+    .nav-card.active {
+        background: #2563eb;
+        color: white;
+        border-color: #2563eb;
+    }
+
+        .nav-card.active i {
+            color: white;
+        }
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .nav-card {
+        width: 100px;
+        padding: 0.75rem 0.5rem;
+    }
+
+        .nav-card i {
+            font-size: 1.25rem;
+        }
+
+        .nav-card span {
+            font-size: 0.8rem;
+        }
+}
+
+@media (max-width: 768px) {
+    .nav-cards {
+        gap: 0.5rem;
+    }
+
+    .nav-card {
+        width: 90px;
+        padding: 0.5rem;
+    }
+
+        .nav-card i {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-card span {
+            font-size: 0.75rem;
+        }
+}
+
+@media (max-width: 576px) {
+    .nav-card span {
+        display: none;
+    }
+
+    .nav-card i {
+        margin-bottom: 0;
+        font-size: 1.2rem;
+    }
+
+    .nav-card {
+        width: 60px;
+        height: 60px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

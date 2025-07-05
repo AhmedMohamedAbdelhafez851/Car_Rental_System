@@ -1,0 +1,86 @@
+﻿/* Rental Navigation */
+.rental-nav-container {
+    background: #fff;
+    padding: 1rem;
+    margin-bottom: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid #eaeaea;
+}
+
+.rental-nav-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.rental-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    color: #2d3748;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid #e2e8f0;
+}
+
+    .rental-nav-btn i {
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+        color: #4a5568;
+    }
+
+    .rental-nav-btn:hover {
+        background: #edf2f7;
+        transform: translateY(-2px);
+    }
+
+    .rental-nav-btn.active {
+        background: #2563eb;
+        color: white;
+        border-color: #2563eb;
+    }
+
+        .rental-nav-btn.active i {
+            color: white;
+        }
+
+    .rental-nav-btn.reservations {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+    }
+
+        .rental-nav-btn.reservations i {
+            color: #16a34a;
+        }
+
+        .rental-nav-btn.reservations.active {
+            background: #16a34a;
+            color: white;
+        }
+
+            .rental-nav-btn.reservations.active i {
+                color: white;
+            }
+
+@media (max-width: 768px) {
+    .rental-nav-buttons {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 0.5rem;
+    }
+
+    .rental-nav-btn {
+        min-width: 70px;
+    }
+}
