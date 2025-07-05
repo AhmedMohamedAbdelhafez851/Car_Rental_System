@@ -1,0 +1,275 @@
+﻿@using MyProject.Domains.Enums
+@model MyProject.Web.ViewModels.RentalDetailsViewModel
+@{
+    ViewData["Title"] = "تفاصيل الحجز";
+}
+
+<link rel="stylesheet" href="~/css/details.css" asp-append-version="true" />
+
+<div class="container container-box animate__animated animate__fadeIn py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary">
+            <i class="fas fa-file-invoice me-2"></i>تفاصيل الحجز #@Model.Id
+        </h3>
+        <a asp-action="Index" asp-controller="Rental" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-right me-2"></i>عودة
+        </a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-user me-2"></i>بيانات العميل
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <p><strong>الاسم:</strong> @Model.CustomerName</p>
+                    <p><strong>رقم الهاتف:</strong> @Model.CustomerPhone</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>رقم الحجز:</strong> #@Model.Id</p>
+                    <p>
+                        <strong>الحالة:</strong>
+                        <span class="badge bg-@(Model.Status == RentalStatus.نشط ? "primary" : Model.Status == RentalStatus.تم_الإرجاع ? "success" : "danger")">
+                            @(Model.Status == RentalStatus.نشط ? "نشط" : Model.Status == RentalStatus.تم_الإرجاع ? "منتهي" : "ملغي")
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-car me-2"></i>تفاصيل السيارة
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <p><strong>السيارة:</strong> @Model.CarDetails</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>السعر اليومي:</strong> @Model.DailyRate.ToString("N0", new System.Globalization.CultureInfo("ar-EG")) جنيه</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <i class="far fa-calendar-alt me-2"></i>تفاصيل الحجز
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <p><strong>تاريخ الاستلام:</strong> @Model.StartDate.ToString("dd/MM/yyyy hh:mm tt", new System.Globalization.CultureInfo("ar-EG"))</p>
+                    <p><strong>تاريخ التسليم:</strong> @Model.EndDate.ToString("dd/MM/yyyy hh:mm tt", new System.Globalization.CultureInfo("ar-EG"))</p>
+                    <p><strong>مستوى البنزين عند الاستلام:</strong> @Model.InitialFuelLevel</p>
+                    <p><strong>قراءة العداد عند الاستلام:</strong> @(Model.InitialOdometer?.ToString("N0") ?? "غير مسجل")</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>مستوى البنزين عند الرجوع:</strong> @(Model.ReturnedFuelLevel?.ToString() ?? "غير مسجل")</p>
+                    <p><strong>قراءة العداد عند الرجوع:</strong> @(Model.ReturnedOdometer?.ToString("N0") ?? "غير مسجل")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-money-bill-wave me-2"></i>الفاتورة
+        </div>
+        <div class="card-body">
+            <table class="table table-borderless table-striped">
+                <tbody>
+                    <tr>
+                        <td>الإيجار الأساسي</td>
+                        <td>@Model.TotalAmount.ToString("N0", new System.Globalization.CultureInfo("ar-EG")) جنيه</td>
+                    </tr>
+                    <tr>
+                        <td>رسوم التأخير</td>
+                        <td>@Model.DelayCharge.ToString("N0", new System.Globalization.CultureInfo("ar-EG")) جنيه</td>
+                    </tr>
+                    <tr>
+                        <td>رسوم البنزين</td>
+                        <td>@Model.FuelCharge.ToString("N0", new System.Globalization.CultureInfo("ar-EG")) جنيه</td>
+                    </tr>
+                    <tr>
+                        <td>رسوم الأضرار</td>
+                        <td>@Model.DamageCharge.ToString("N0", new System.Globalization.CultureInfo("ar-EG")) جنيه</td>
+                    </tr>
+                    @if (Model.Penalties.Any())
+                    {
+                        <tr>
+                            <td><strong>المخالفات</strong></td>
+                            <td></td>
+                        </tr>
+                        @foreach (var penalty in Model.Penalties)
+                        {
+                            <tr>
+                                <td>@penalty.Reason</td>
+                                <td>@penalty.Amount.ToString("N0", new System.Globalization.CultureInfo("ar-EG")) جنيه</td>
+                            </tr>
+                        }
+                    }
+                    <tr class="table-primary">
+                        <td><strong>الإجمالي النهائي</strong></td>
+                        <td><strong>@((Model.TotalAmount + Model.DelayCharge + Model.FuelCharge + Model.DamageCharge + Model.Penalties.Sum(p => p.Amount)).ToString("N0", new System.Globalization.CultureInfo("ar-EG"))) جنيه</strong></td>
+                    </tr>
+                    <tr>
+                        <td>المدفوع</td>
+                        <td>@Model.AmountPaid.ToString("N0", new System.Globalization.CultureInfo("ar-EG")) جنيه</td>
+                    </tr>
+                    <tr class="table-success">
+                        <td><strong>المتبقي</strong></td>
+                        <td><strong>@((Model.TotalAmount + Model.DelayCharge + Model.FuelCharge + Model.DamageCharge + Model.Penalties.Sum(p => p.Amount) - Model.AmountPaid).ToString("N0", new System.Globalization.CultureInfo("ar-EG"))) جنيه</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @if (Model.Status == RentalStatus.نشط)
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white">
+                <i class="fas fa-check me-2"></i>إنهاء الحجز
+            </div>
+            <div class="card-body">
+                <form id="checkInForm" asp-action="CheckIn" asp-controller="Rental" method="post">
+                    <input type="hidden" name="RentalId" value="@Model.Id" />
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">مستوى البنزين عند الرجوع</label>
+                            <select class="form-select" name="ReturnedFuelLevel" required>
+                                <option value="" disabled selected>اختر مستوى البنزين</option>
+                                <option value="فارغ">فارغ</option>
+                                <option value="ربع خزان">ربع خزان</option>
+                                <option value="نصف خزان">نصف خزان</option>
+                                <option value="ثلاثة أرباع خزان">ثلاثة أرباع خزان</option>
+                                <option value="ممتلئ">ممتلئ</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">قراءة العداد عند الرجوع</label>
+                            <input type="number" class="form-control" name="ReturnedOdometer" required min="0" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">رسوم الأضرار (اختياري)</label>
+                            <input type="number" class="form-control" name="DamageCharge" min="0" value="0" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">الدفع الإضافي (اختياري)</label>
+                            <input type="number" class="form-control" name="AdditionalPayment" min="0" value="0" />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">المخالفات (اختياري)</label>
+                            <div id="penalties-container">
+                                <div class="row g-3 penalty-row mb-2">
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="Penalties[0].Reason" placeholder="سبب المخالفة" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" class="form-control" name="Penalties[0].Amount" placeholder="المبلغ" min="0" />
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary mt-2" id="addPenalty">إضافة مخالفة أخرى</button>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-check me-2"></i>إنهاء الحجز
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+
+    <div class="d-flex gap-2 justify-content-center">
+        <button onclick="window.print()" class="btn btn-primary btn-lg">
+            <i class="fas fa-print me-2"></i>طباعة الفاتورة
+        </button>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let penaltyIndex = 1;
+            $("#addPenalty").click(function () {
+                const penaltyRow = `
+                    <div class="row g-3 penalty-row mb-2">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="Penalties[${penaltyIndex}].Reason" placeholder="سبب المخالفة" />
+                        </div>
+                        <div class="col-md-4">
+                            <input type="number" class="form-control" name="Penalties[${penaltyIndex}].Amount" placeholder="المبلغ" min="0" />
+                        </div>
+                    </div>`;
+                $("#penalties-container").append(penaltyRow);
+                penaltyIndex++;
+            });
+
+            $("#checkInForm").submit(function (e) {
+                e.preventDefault();
+                const form = $(this);
+                $.ajax({
+                    url: form.attr("action"),
+                    type: form.attr("method"),
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            alert("تم إنهاء الحجز بنجاح!");
+                            window.location.reload();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("حدث خطأ أثناء إنهاء الحجز. حاول مرة أخرى.");
+                    }
+                });
+            });
+        });
+    </script>
+    <style>
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover, .btn-success:hover, .btn-outline-primary:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s;
+        }
+
+        .table td {
+            padding: 0.75rem;
+            vertical-align: middle;
+        }
+
+        .penalty-row {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 0.5rem;
+        }
+        @@media (max-width: 576px) {
+            .container-box
+
+        {
+            padding: 1rem;
+        }
+
+        .btn-lg, .btn-outline-primary {
+            width: 100%;
+        }
+
+        }
+    </style>
+}

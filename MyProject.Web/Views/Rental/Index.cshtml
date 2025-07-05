@@ -1,0 +1,105 @@
+﻿@using MyProject.Domains.Enums
+@model List<MyProject.Web.ViewModels.RentalViewModel>
+@{
+    ViewData["Title"] = "قائمة الحجوزات";
+}
+
+<link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
+
+<div class="container container-box animate__animated animate__fadeIn">
+    <h3 class="mb-4 text-primary d-flex align-items-center">
+        <i class="fas fa-list me-2"></i>قائمة الحجوزات
+    </h3>
+
+    <div class="mb-4 search-container">
+        <div class="input-group position-relative">
+            <input type="text" class="form-control search-input" id="searchQuery" placeholder="ابحث برقم الحجز، اسم العميل، أو رقم اللوحة" oninput="searchRentals()" />
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+            <div class="spinner-border spinner-border-sm text-primary loading-spinner" role="status" style="display: none;">
+                <span class="visually-hidden">جاري التحميل...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rental-card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5><i class="fas fa-car me-2"></i>جميع الحجوزات</h5>
+            <a asp-action="Quick" class="btn btn-success btn-sm">
+                <i class="fas fa-plus me-1"></i>إضافة حجز جديد
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>رقم الحجز</th>
+                            <th>اسم العميل</th>
+                            <th>تفاصيل السيارة</th>
+                            <th>تاريخ الاستلام</th>
+                            <th>تاريخ التسليم</th>
+                            <th>الإجمالي</th>
+                            <th>المدفوع</th>
+                            <th>المتبقي</th>
+                            <th>الحالة</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rentalsTable">
+                        @if (Model.Any())
+                        {
+                            foreach (var rental in Model)
+                            {
+                                <tr class="rental-row">
+                                    <td>#@rental.Id</td>
+                                    <td>@rental.CustomerName</td>
+                                    <td>@rental.CarDetails</td>
+                                    <td>@rental.StartDate.ToString("yyyy-MM-dd hh:mm tt", new System.Globalization.CultureInfo("ar-EG"))</td>
+                                    <td>@rental.EndDate.ToString("yyyy-MM-dd hh:mm tt", new System.Globalization.CultureInfo("ar-EG"))</td>
+                                    <td>@rental.TotalAmount.ToString("N0") جنيه</td>
+                                    <td>@rental.AmountPaid.ToString("N0") جنيه</td>
+                                    <td>@((rental.TotalAmount - rental.AmountPaid).ToString("N0")) جنيه</td>
+                                    <td>
+                                        @switch (rental.Status)
+                                        {
+                                            case RentalStatus.نشط:
+                                                <span class="badge bg-primary badge-status">نشط</span>
+                                                break;
+                                            case RentalStatus.تم_الإرجاع:
+                                                <span class="badge bg-success badge-status">منتهي</span>
+                                                break;
+                                            case RentalStatus.ملغي:
+                                                <span class="badge bg-danger badge-status">ملغي</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@rental.Id" class="btn btn-sm btn-info me-1">
+                                            <i class="fas fa-info-circle"></i> تفاصيل
+                                        </a>
+                                        @if (rental.Status == RentalStatus.نشط)
+                                        {
+                                            <a asp-action="CheckIn" asp-route-id="@rental.Id" class="btn btn-sm btn-success check-in-btn" onclick="return confirm('هل أنت متأكد من إنهاء الحجز؟');">
+                                                <i class="fas fa-check"></i> إنهاء
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="text-center py-3">لا توجد حجوزات حاليًا</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/index.js" asp-append-version="true"></script>
+}

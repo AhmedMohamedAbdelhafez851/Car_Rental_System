@@ -1,0 +1,168 @@
+﻿@model List<MyProject.Web.ViewModels.CarViewModel>
+@{
+    ViewData["Title"] = "إدارة السيارات";
+}
+
+<h1 class="text-center mb-4">إدارة السيارات</h1>
+
+<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#carModal" onclick="resetForm()">
+    إضافة سيارة جديدة
+</button>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ماركة السيارة</th>
+            <th>الموديل</th>
+            <th>رقم اللوحة</th>
+            <th>السعر اليومي</th>
+            <th>الحالة</th>
+            <th>ملاحظات</th>
+            <th>إجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var car in Model)
+        {
+            <tr>
+                <td>@car.Brand</td>
+                <td>@car.Model</td>
+                <td>@car.PlateNumber</td>
+                <td>@car.DailyRate.ToString("C")</td>
+                <td>@car.Status</td>
+                <td>@car.Notes</td>
+                <td>
+                    <button class="btn btn-sm btn-warning" onclick="editCar(@car.Id)">تعديل</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteCar(@car.Id)">حذف</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="carModal" tabindex="-1" aria-labelledby="carModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="carModalLabel">إضافة/تعديل سيارة</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="carForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="Id" name="Id" value="0" />
+                    <div class="mb-3">
+                        <label class="form-label">ماركة السيارة</label>
+                        <input type="text" class="form-control" id="Brand" name="Brand" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">الموديل</label>
+                        <input type="text" class="form-control" id="Model" name="Model" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">رقم اللوحة</label>
+                        <input type="text" class="form-control" id="PlateNumber" name="PlateNumber" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">السعر اليومي</label>
+                        <input type="number" step="0.01" class="form-control" id="DailyRate" name="DailyRate" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">حالة السيارة</label>
+                        <select class="form-select" id="Status" name="Status">
+                            <option value="متاحه">متاحه</option>
+                            <option value="مؤجره">مؤجره</option>
+                            <option value="تحت_الصيانه">تحت_الصيانه</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">ملاحظات</label>
+                        <textarea class="form-control" id="Notes" name="Notes"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                <button type="button" class="btn btn-primary" onclick="saveCar()">حفظ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function resetForm() {
+            $('#carForm')[0].reset();
+            $('#Id').val('0');
+            $('#carModalLabel').text('إضافة سيارة جديدة');
+        }
+
+        function editCar(id) {
+            $.ajax({
+                url: '@Url.Action("GetCar", "Cars")',
+                type: 'GET',
+                data: { id: id },
+                success: function (data) {
+                    $('#Id').val(data.id);
+                    $('#Brand').val(data.brand);
+                    $('#Model').val(data.model);
+                    $('#PlateNumber').val(data.plateNumber);
+                    $('#DailyRate').val(data.dailyRate);
+                    $('#Status').val(data.status);
+                    $('#Notes').val(data.notes);
+                    $('#carModalLabel').text('تعديل سيارة');
+                    $('#carModal').modal('show');
+                },
+                error: function () {
+                    alert('حدث خطأ أثناء جلب بيانات السيارة');
+                }
+            });
+        }
+
+        function saveCar() {
+            if ($('#carForm')[0].checkValidity()) {
+                $.ajax({
+                    url: '@Url.Action("CreateOrUpdate", "Cars")',
+                    type: 'POST',
+                    data: $('#carForm').serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload();
+                        } else {
+                            alert('خطأ: ' + response.errors.join('\n'));
+                        }
+                    },
+                    error: function () {
+                        alert('حدث خطأ أثناء حفظ السيارة');
+                    }
+                });
+            } else {
+                $('#carForm')[0].reportValidity();
+            }
+        }
+
+        function deleteCar(id) {
+            if (confirm('هل أنت متأكد من حذف السيارة؟')) {
+                $.ajax({
+                    url: '@Url.Action("Delete", "Cars")',
+                    type: 'POST',
+                    data: { id: id, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('حدث خطأ أثناء حذف السيارة');
+                    }
+                });
+            }
+        }
+    </script>
+}

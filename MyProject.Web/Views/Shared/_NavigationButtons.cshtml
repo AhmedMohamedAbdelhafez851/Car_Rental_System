@@ -1,0 +1,39 @@
+﻿<div class="rental-nav-container">
+    @{
+        var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    }
+    <div class="rental-nav-buttons">
+        <a class="rental-nav-btn @(currentController == "Customers" ? "active" : "")" asp-controller="Customers" asp-action="Index">
+            <i class="fas fa-users"></i>
+            <span>العملاء</span>
+        </a>
+        <a class="rental-nav-btn @(currentController == "Cars" ? "active" : "")" asp-controller="Cars" asp-action="Index">
+            <i class="fas fa-car"></i>
+            <span>السيارات</span>
+        </a>
+        <a class="rental-nav-btn @(currentController == "Contracts" ? "active" : "")" asp-controller="Rental" asp-action="Quick">
+            <i class="fas fa-file-contract"></i>
+            <span>العقود</span>
+        </a>
+        <a class="rental-nav-btn @(currentController == "Drivers" ? "active" : "")" asp-controller="Drivers" asp-action="Index">
+            <i class="fas fa-id-card"></i>
+            <span>السائقين</span>
+        </a>
+        <a class="rental-nav-btn @(currentController == "Maintenance" ? "active" : "")" asp-controller="Maintenance" asp-action="Index">
+            <i class="fas fa-tools"></i>
+            <span>الصيانة</span>
+        </a>
+        <a class="rental-nav-btn @(currentController == "Fines" ? "active" : "")" asp-controller="Fines" asp-action="Index">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>الغرامات</span>
+        </a>
+        <a class="rental-nav-btn @(currentController == "Payments" ? "active" : "")" asp-controller="Payments" asp-action="Index">
+            <i class="fas fa-credit-card"></i>
+            <span>المدفوعات</span>
+        </a>
+        <a class="rental-nav-btn reservations @(currentController == "Reservations" ? "active" : "")" asp-controller="Reservations" asp-action="Index">
+            <i class="fas fa-calendar-check"></i>
+            <span>الحجوزات</span>
+        </a>
+    </div>
+</div>

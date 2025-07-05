@@ -1,0 +1,244 @@
+﻿@using MyProject.Domains.Enums
+@model MyProject.Web.ViewModels.CreateRentalFullViewModel
+@{
+    ViewData["Title"] = "تأجير سيارة جديدة";
+}
+
+<link rel="stylesheet" href="~/css/Quick.css" asp-append-version="true">
+
+<div class="container-fluid p-0 h-100">
+    <div class="rental-container d-flex flex-column h-100 bg-light">
+        <header class="text-center py-3 bg-primary text-white">
+            <h2><i class="fas fa-car me-2"></i>تأجير سيارة جديدة</h2>
+        </header>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <form asp-action="Quick" method="post" id="rentalForm" class="flex-grow-1 d-flex flex-column p-3">
+            @Html.AntiForgeryToken()
+
+            <!-- بيانات العميل -->
+            <section class="card mb-3 shadow-sm border-0 rental-section">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-user me-2"></i>بيانات العميل</h5>
+                    <button type="button" class="btn btn-success btn-sm" id="openCustomerModal">
+                        <i class="fas fa-user-plus me-1"></i>إضافة عميل
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-9 col-12 mb-2">
+                            <label class="form-label">اختر العميل</label>
+                            <select id="customerSelect" class="form-select select2" required>
+                                <option value="">-- اختر عميل --</option>
+                                @foreach (var customer in Model.Customers)
+                                {
+                                    <option value="@customer.Value">@customer.Text</option>
+                                }
+                            </select>
+                            <input type="hidden" asp-for="CustomerId" id="selectedCustomerId" />
+                            <span class="text-danger customer-error" style="display:none;">يجب اختيار عميل</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- اختيار السيارة -->
+            <section class="card mb-3 shadow-sm border-0 rental-section">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-car me-2"></i>اختيار السيارة</h5>
+                    <button type="button" class="btn btn-success btn-sm" id="openCarModal">
+                        <i class="fas fa-car-side me-1"></i>اختر سيارة
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="selectedCarInfo" class="alert alert-info mb-2" role="alert">
+                                <i class="fas fa-info-circle me-2"></i>لم يتم اختيار سيارة بعد
+                            </div>
+                            <input type="hidden" asp-for="CarId" id="selectedCarId" required />
+                            <span class="text-danger car-error" style="display:none;">يجب اختيار سيارة</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- تفاصيل الحجز -->
+            <section class="card mb-3 shadow-sm border-0 rental-section">
+                <div class="card-header bg-secondary text-white">
+                    <h5><i class="far fa-calendar-alt me-2"></i>تفاصيل الحجز</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 col-12 mb-2">
+                            <label class="form-label">تاريخ الاستلام</label>
+                            <input asp-for="StartDate" type="datetime-local" class="form-control" required />
+                            <span class="text-danger date-error" style="display:none;">تاريخ الاستلام مطلوب</span>
+                        </div>
+                        <div class="col-md-6 col-12 mb-2">
+                            <label class="form-label">تاريخ التسليم</label>
+                            <input asp-for="EndDate" type="datetime-local" class="form-control" required />
+                            <span class="text-danger date-error" style="display:none;">تاريخ التسليم مطلوب ويجب أن يكون بعد الاستلام</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-12 mb-2">
+                            <label class="form-label">حالة البنزين عند الاستلام</label>
+                            <select asp-for="InitialFuelLevel" class="form-select" required>
+                                <option value="">-- اختر مستوى البنزين --</option>
+                                @foreach (var level in Html.GetEnumSelectList<FuelLevel>())
+                                {
+                                    <option value="@level.Value">@level.Text</option>
+                                }
+                            </select>
+                            <span class="text-danger fuel-error" style="display:none;">مستوى البنزين مطلوب</span>
+                        </div>
+                        <div class="col-md-6 col-12 mb-2">
+                            <label class="form-label">قراءة العداد (كم)</label>
+                            <input asp-for="InitialOdometer" type="number" min="0" class="form-control" required />
+                            <span class="text-danger odometer-error" style="display:none;">قراءة العداد مطلوبة ويجب أن تكون 0 أو أكبر</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- الدفع -->
+            <section class="card mb-3 shadow-sm border-0 rental-section">
+                <div class="card-header bg-secondary text-white">
+                    <h5><i class="fas fa-money-bill-wave me-2"></i>الدفع</h5>
+                </div>
+                <div class="card-body">
+                    <div class="price-card p-3 mb-3">
+                        <div class="row">
+                            <div class="col-6"><small>السعر/اليوم:</small> <span id="dailyRate" class="fw-bold">0</span> جنيه</div>
+                            <div class="col-6"><small>عدد الأيام:</small> <span id="daysCount" class="fw-bold">0</span> يوم</div>
+                        </div>
+                        <hr class="my-2">
+                        <div class="row">
+                            <div class="col-12"><small>الإجمالي:</small> <span id="totalAmount" class="fw-bold">0</span> جنيه</div>
+                        </div>
+                        <div class="mb-2 mt-3">
+                            <label class="form-label">المبلغ المدفوع (عربون)</label>
+                            <input name="PaidAmount" id="paidAmount" type="number" min="0" step="0.01" class="form-control" placeholder="0" />
+                            <span class="text-danger paid-amount-error" style="display:none;">المبلغ يجب أن يكون 0 أو أكبر</span>
+                        </div>
+                        <h5 class="text-success">المتبقي: <span id="remainingAmount">0</span> جنيه</h5>
+                    </div>
+                    <div class="d-grid">
+                        <button type="button" class="btn btn-primary btn-lg" id="submitBtn" disabled>
+                            <i class="fas fa-check-circle me-2"></i>تأكيد الحجز
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </form>
+
+        <!-- Modal لإضافة عميل -->
+        <div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="customerModalLabel">إضافة عميل جديد</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="customerModalBody">
+                        <!-- Content loaded dynamically by Quick.js -->
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Buttons loaded dynamically by Quick.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal لاختيار السيارة -->
+        <div class="modal fade" id="carModal" tabindex="-1" aria-labelledby="carModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="carModalLabel">اختيار السيارة</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="carModalBody">
+                        <!-- Content loaded dynamically by Quick.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal تأكيد الحجز النهائي -->
+        <div class="modal fade" id="confirmRentalModal" tabindex="-1" aria-labelledby="confirmRentalModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="confirmRentalModalLabel">تأكيد بيانات الحجز</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-6"><strong>العميل:</strong></div>
+                            <div class="col-6" id="confirmCustomer"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6"><strong>السيارة:</strong></div>
+                            <div class="col-6" id="confirmCar"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6"><strong>تاريخ الاستلام:</strong></div>
+                            <div class="col-6" id="confirmStartDate"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6"><strong>تاريخ التسليم:</strong></div>
+                            <div class="col-6" id="confirmEndDate"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6"><strong>عدد الأيام:</strong></div>
+                            <div class="col-6" id="confirmDaysCount"></div>
+                        </div>
+                        <hr>
+                        <div class="row mb-2">
+                            <div class="col-6"><strong>الإجمالي:</strong></div>
+                            <div class="col-6" id="confirmTotalAmount"></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6"><strong>المبلغ المدفوع:</strong></div>
+                            <div class="col-6" id="confirmPaidAmount"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6"><strong>المتبقي:</strong></div>
+                            <div class="col-6" id="confirmRemainingAmount"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="button" class="btn btn-success" id="confirmSubmitBtn">
+                            <i class="fas fa-check-circle me-1"></i> تأكيد الحجز
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- حاوية للتنبيهات -->
+        <div id="alertsContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1100"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/validation.js"></script>
+    <script src="~/js/Quick.js" asp-append-version="true"></script>
+}
